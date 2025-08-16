@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Booking Confirmed!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h2>Booking Confirmed!</h2>
+    <div id="finalDetail"></div>
+    <button onclick="window.location.href='index.html'">Book Another Ticket</button>
+  </div>
+  <script>
+    const booking = JSON.parse(localStorage.getItem('booking'));
+    const payment = JSON.parse(localStorage.getItem('payment'));
+    const finalDetail = document.getElementById('finalDetail');
+    if (booking && payment) {
+      finalDetail.innerHTML = `
+        <div class="summary">
+          <strong>Your Booking Details:</strong><br>
+          Train: <b>${booking.train}</b><br>
+          Date: <b>${booking.date}</b><br>
+          Passenger: <b>${booking.passenger}</b><br>
+          Seats: <b>${booking.seats}</b><br>
+          Paid: <b>₹${booking.seats * 250}</b>
+          <hr>
+          <strong>Payment Info:</strong><br>
+          Card: <b>${payment.card}</b><br>
+          Expiry: <b>${payment.expiry}</b>
+        </div>
+      `;
+    } else {
+      finalDetail.innerHTML = "<b>No booking found.</b>";
+    }
+    // Clear booking/payment after showing
+    localStorage.removeItem('booking');
+    localStorage.removeItem('payment');
+  </script>
+</body>
+</html>

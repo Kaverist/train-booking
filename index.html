@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Responsive Train Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h2>Train Booking Form</h2>
+    <form id="bookingForm">
+      <div class="form-group">
+        <label for="train">Select Train:</label>
+        <select id="train" name="train" required>
+          <option value="">--Choose Train--</option>
+          <option value="Express 101">Express 101</option>
+          <option value="Coastal 202">Coastal 202</option>
+          <option value="Mountain 303">Mountain 303</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="date">Travel Date:</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+      <div class="form-group">
+        <label for="passenger">Passenger Name:</label>
+        <input type="text" id="passenger" name="passenger" required>
+      </div>
+      <div class="form-group">
+        <label for="seats">Number of Seats:</label>
+        <input type="number" id="seats" name="seats" required min="1" max="6">
+      </div>
+      <button type="submit">Proceed to Payment</button>
+    </form>
+    <div class="summary" id="summary">
+      Fill out the form to see your booking summary.
+    </div>
+  </div>
+  <script>
+    // Set minimum date for today
+    document.getElementById('date').min = new Date().toISOString().split('T')[0];
+    const bookingForm = document.getElementById('bookingForm');
+    const summary = document.getElementById('summary');
+    function updateSummary() {
+      const train = document.getElementById('train').value;
+      const date = document.getElementById('date').value;
+      const passenger = document.getElementById('passenger').value;
+      const seats = document.getElementById('seats').value;
+      if (train && date && passenger && seats) {
+        summary.innerHTML = `
+          <strong>Booking Summary:</strong><br>
+          Train: <b>${train}</b><br>
+          Date: <b>${date}</b><br>
+          Passenger: <b>${passenger}</b><br>
+          Seats: <b>${seats}</b>
+        `;
+      } else {
+        summary.innerHTML = "Fill out the form to see your booking summary.";
+      }
+    }
+    bookingForm.addEventListener('input', updateSummary);
+
+    bookingForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Save booking details to localStorage
+      localStorage.setItem('booking', JSON.stringify({
+        train: document.getElementById('train').value,
+        date: document.getElementById('date').value,
+        passenger: document.getElementById('passenger').value,
+        seats: document.getElementById('seats').value
+      }));
+      window.location.href = "payment.html";
+    });
+  </script>
+</body>
+</html>

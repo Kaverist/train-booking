@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Train Payment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h2>Payment</h2>
+    <div id="bookingDetail"></div>
+    <form id="paymentForm">
+      <div class="form-group">
+        <label for="card">Card Number:</label>
+        <input type="text" id="card" name="card" required maxlength="16" pattern="\d{16}">
+      </div>
+      <div class="form-group">
+        <label for="expiry">Expiry Date:</label>
+        <input type="month" id="expiry" name="expiry" required>
+      </div>
+      <div class="form-group">
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" name="cvv" required maxlength="3" pattern="\d{3}">
+      </div>
+      <button type="submit">Pay & Confirm</button>
+    </form>
+    <div class="summary" id="paymentSummary"></div>
+  </div>
+  <script>
+    // Show booking details
+    const booking = JSON.parse(localStorage.getItem('booking'));
+    const bookingDetail = document.getElementById('bookingDetail');
+    if (booking) {
+      bookingDetail.innerHTML = `
+        <div class="summary">
+          <strong>Booking Summary:</strong><br>
+          Train: <b>${booking.train}</b><br>
+          Date: <b>${booking.date}</b><br>
+          Passenger: <b>${booking.passenger}</b><br>
+          Seats: <b>${booking.seats}</b>
+          <br>
+          <b>Total: ₹${booking.seats * 250}</b>
+        </div>
+      `;
+    }
+    const paymentForm = document.getElementById('paymentForm');
+    paymentForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Save payment details to localStorage (for demo only, don't do this in production)
+      localStorage.setItem('payment', JSON.stringify({
+        card: document.getElementById('card').value.replace(/\d{12}(\d{4})/, '************$1'),
+        expiry: document.getElementById('expiry').value,
+        cvv: "***"
+      }));
+      window.location.href = "confirmation.html";
+    });
+  </script>
+</body>
+</html>
